@@ -1,147 +1,145 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Random;
-import java.util.Scanner;
 
 public class Game {
     static final Random random = new Random();
-    static Scanner scanner = new Scanner(System.in);
+    private static BufferedReader bufferedReader;
+    private static Creature player = null;
+    private static Fight fight = null;
 
     public static void main(String[] args) {
-        System.out.println("Назовите своего персонажа.");
-        String name = scanner.nextLine();
-        System.out.println("Имя вашего персонажа: " + name + "\n");
-
-        Player player = new Player(name, 10, 100, 1000, 10, 0, 0);
-//        Player player = new Player(name, (random.nextInt(10) + 1), (random.nextInt(100) + 1),
-//                random.nextInt(1000), (random.nextInt(10) + 1), 0, 0);
-
-//        Goblin goblin = new Goblin((random.nextInt(10) + 1), (random.nextInt(100) + 1),
-//                random.nextInt(1000), (random.nextInt(10) + 1));
-//        Goblin goblin1 = new Goblin((random.nextInt(10) + 1), (random.nextInt(100) + 1),
-//                random.nextInt(1000), (random.nextInt(10) + 1));
-//        Goblin goblin2 = new Goblin((random.nextInt(10) + 1), (random.nextInt(100) + 1),
-//                random.nextInt(1000), (random.nextInt(10) + 1));
-//        Goblin goblin3 = new Goblin((random.nextInt(10) + 1), (random.nextInt(100) + 1),
-//                random.nextInt(1000), (random.nextInt(10) + 1));
-//        Skeleton skeleton = new Skeleton((random.nextInt(10) + 1), (random.nextInt(100) + 1),
-//                random.nextInt(1000), (random.nextInt(10) + 1));
-//        Skeleton skeleton1 = new Skeleton((random.nextInt(10) + 1), (random.nextInt(100) + 1),
-//                random.nextInt(1000), (random.nextInt(10) + 1));
-//        Skeleton skeleton2 = new Skeleton((random.nextInt(10) + 1), (random.nextInt(100) + 1),
-//                random.nextInt(1000), (random.nextInt(10) + 1));
-//        Skeleton skeleton3 = new Skeleton((random.nextInt(10) + 1), (random.nextInt(100) + 1),
-//                random.nextInt(1000), (random.nextInt(10) + 1));
-
-/*
-        List<Skeleton> skeletonList = new ArrayList<>();
-        skeletonList.add(skeleton);
-        skeletonList.add(skeleton1);
-        skeletonList.add(skeleton2);
-        skeletonList.add(skeleton3);
-
-        for (Skeleton skeletons : skeletonList){
-            System.out.println(skeletons);
-        }
-
-        List<Goblin> goblinList = new ArrayList<>();
-        goblinList.add(goblin);
-        goblinList.add(goblin1);
-        goblinList.add(goblin2);
-        goblinList.add(goblin3);
-
-        for (Goblin goblins : goblinList){
-            System.out.println(goblins);
-        }
-*/
-
-        System.out.println("Ваши параметры: \n" + "HP: " + player.getHealth() + "\n"
-                + "Сила: " + player.getStrength() + "\n" + "Ловкость: " + player.getAgility() + "\n"
-                + "Золото: " + player.getGold() + "\n");
-
-        nextWay(player);
-        while (player.isLife() || scanner.nextInt() != 3) {
-            caseContinied(player, new Goblin((random.nextInt(10) + 1), (random.nextInt(100) + 1),
-                            random.nextInt(1000), (random.nextInt(10) + 1)),
-                    new Skeleton((random.nextInt(10) + 1), (random.nextInt(100) + 1),
-                            random.nextInt(1000), (random.nextInt(10) + 1)));
+        bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        fight = new Fight();
+        System.out.println("Введите имя персонажа");
+        try {
+            command(bufferedReader.readLine());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-    private static void nextWay(Player player) {
+    private static void command(String str) throws IOException {
+        if (player == null) {
+            player = new Hero(str, 20, 100, 100, 20, 0, 0);
+            System.out.printf("Спасти наш мир от драконов вызвался %s!\n", player.getName());
+            printNavigation();
+        }
+        switch (str) {
+            case "1" -> {
+                sellTrader(bufferedReader.readLine());
+                printNavigation();
+                command(bufferedReader.readLine());
+            }
+            case "2" -> commitFight();
+            case "да" -> command("2");
+            case "нет" -> {
+                printNavigation();
+                command(bufferedReader.readLine());
+            }
+            case "3" -> {
+                System.out.printf("Вот всё и закончилось. Ты дома. Уровень здоровья: %d. Золота накоплено:%d. Опыт:%d \n",
+                        player.getHealth(), player.getGold(), player.getExperience());
+                System.exit(1);
+            }
+        }
+        command(bufferedReader.readLine());
+    }
+
+    private static void printNavigation() {
         System.out.println("Куда вы хотите пойти?");
-        System.out.println("1. К торговцу (прикупить лечебного зелья)");
-        System.out.println("2. Тёмный лес (возможно будет драка)");
-        System.out.println("3. Домой к маме)))");
-        if (scanner.hasNextInt()) {
-            int choice = scanner.nextInt();
-            switch (choice) {
-                case 1 -> {
-//                    player.trade(new Player());
-                    System.out.println("Торговец ещё не вышел на работу");
-                }
-                case 2 -> CaseTwo(player, new Goblin((random.nextInt(10) + 1), (random.nextInt(100) + 1),
-                                random.nextInt(1000), (random.nextInt(10) + 1)),
-                        new Skeleton((random.nextInt(10) + 1), (random.nextInt(100) + 1),
-                                random.nextInt(1000), (random.nextInt(10) + 1)));
-                case 3 -> System.out.println("Всё закончилось, ты дома. Золота собрано: " + player.getGold() + "\n");
-                default -> System.out.println("Что-то пошло не так, повторите ввод, введите цифру от 1 до 3");
-            }
-        } else {
-            System.out.println("Вы ввели некорректный символ, введите цифру от 1 до 3");
-        }
+        System.out.println("1.К Торговцу");
+        System.out.println("2.В тёмный лес");
+        System.out.println("3.Выход");
     }
 
-    private static void caseContinied(Player player, Goblin goblin, Skeleton skeleton) {
-        System.out.println("Осталось здоровья: " + player.getHealth());
-        System.out.println("Золота в сундуке: " + player.getGold() + "\n");
+    private static void commitFight() {
+        fight.fight(player, createMonster(), new FightRepeated() {
 
-        System.out.println("Выберете дальнейшее действие: ");
-        System.out.println("1. Вернуться в город");
-        System.out.println("2. Продолжить торговлю/приключения" + "\n");
-        if (scanner.hasNextInt()) {
-            int choice = scanner.nextInt();
-            switch (choice) {
-                case 1 -> {
-                    System.out.println("Вы вернулись в город");
-                    nextWay(player);
+            @Override
+            public void fightWin() {
+                System.out.printf("%s победил! Теперь у Вас %d опыта и %d золота, осталось %d здоровья.\n",
+                        player.getName(), player.getExperience(), player.getGold(), player.getHealth());
+                System.out.println("Желаете продолжить поход или вернуться в город? (да/нет)");
+                try {
+                    command(bufferedReader.readLine());
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                case 2 -> CaseTwo(player, new Goblin((random.nextInt(10) + 1), (random.nextInt(100) + 1),
-                                random.nextInt(1000), (random.nextInt(10) + 1)),
-                        new Skeleton((random.nextInt(10) + 1), (random.nextInt(100) + 1),
-                                random.nextInt(1000), (random.nextInt(10) + 1)));
             }
-        }
+
+            @Override
+            public void fightLost() {
+            }
+        });
     }
 
+    interface FightRepeated {
+        void fightWin();
 
-    private static void CaseTwo(Player player, Goblin goblin, Skeleton skeleton) {
-        System.out.println("Вы встретили монстра!!!");
-        int nextMonster = (random.nextInt(2) + 1);
+        void fightLost();
+    }
+
+    private static Creature createMonster() {
+        int nextMonster = (random.nextInt(3) + 1);
         if (nextMonster == 1) {
-            System.out.println("Это скелет, его параметры: \n" + "HP: " + skeleton.getHealth() + "\n"
-                    + "Сила: " + skeleton.getStrength() + "\n" + "Ловкость: " + skeleton.getAgility() + "\n"
-                    + "Золото: " + skeleton.getGold());
-            System.out.println("Вступить в бой? (1 - да) (2 - нет)");
-            if (scanner.nextInt() == 1) {
-                Fight.fight(player, new Skeleton((random.nextInt(10) + 1), (random.nextInt(100) + 1),
-                        random.nextInt(1000), (random.nextInt(10) + 1)));
-            } else {
-                System.out.println("Вы обманули скелета и прошли дальше");
-            }
+            return new Goblin(
+                    (random.nextInt(20) + 1),
+                    (random.nextInt(100) + 1),
+                    (random.nextInt(100) + 1),
+                    (random.nextInt(20) + 1),
+                    (random.nextInt(100) + 1));
+        } else if (nextMonster == 2) {
+            return new Skeleton(
+                    (random.nextInt(20) + 1),
+                    (random.nextInt(100) + 1),
+                    (random.nextInt(100) + 1),
+                    (random.nextInt(20) + 1),
+                    (random.nextInt(100) + 1));
         } else {
-            System.out.println("Это гоблин, его параметры: \n" + "HP: " + goblin.getHealth() + "\n"
-                    + "Сила: " + goblin.getStrength() + "\n" + "Ловкость: " + goblin.getAgility() + "\n"
-                    + "Золото: " + goblin.getGold());
-            System.out.println("Вступить в бой? (1 - да) (2 - нет)");
-            if (scanner.nextInt() == 1) {
-                Fight.fight(player, new Goblin((random.nextInt(10) + 1), (random.nextInt(100) + 1),
-                        random.nextInt(1000), (random.nextInt(10) + 1)));
-            } else {
-                System.out.println("Вы обманули гоблина и прошли дальше");
+            return new Orc(
+                    (random.nextInt(25) + 1),
+                    (random.nextInt(150) + 1),
+                    (random.nextInt(150) + 1),
+                    (random.nextInt(25) + 1),
+                    (random.nextInt(150) + 1));
+        }
+    }
+
+    private static void sellTrader(String str) {
+        System.out.println("Что желаете приобрести? зелье/меч/щит");
+        int potion = 50;
+        int pricePotion = 50;
+        int sword = 5;
+        int priceSword = 100;
+        int shield = 10;
+        int priceShield = 100;
+        switch (str) {
+            case "зелье" -> {
+                if (player.getGold() < pricePotion) {
+                    System.out.println("Не хватает денег на зелье(((");
+                } else {
+                    player.setHealth(player.getHealth() + potion);
+                    player.setGold(player.getGold() - pricePotion);
+                }
+            }
+            case "меч" -> {
+                if (player.getGold() < priceSword) {
+                    System.out.println("Не хватает денег на меч, дерись палкой)))");
+                } else {
+                    player.setStrength(player.getStrength() + sword);
+                    player.setGold(player.getGold() - priceSword);
+                }
+            }
+            case "щит" -> {
+                if (player.getGold() < priceShield) {
+                    System.out.println("Не хватает денег на щит(((");
+                } else {
+                    player.setAgility(player.getAgility() + shield);
+                    player.setGold(player.getGold() - priceShield);
+                }
             }
         }
     }
 }
-
-
