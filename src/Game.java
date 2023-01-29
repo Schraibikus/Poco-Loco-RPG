@@ -22,12 +22,13 @@ public class Game {
 
     private static void command(String str) throws IOException {
         if (player == null) {
-            player = new Hero(str, 20, 100, 100, 20, 0, 0);
+            player = new Hero(str, 20, 100, 50, 20, 0, 0);
             System.out.printf("Спасти наш мир от драконов вызвался %s!\n", player.getName());
             printNavigation();
         }
         switch (str) {
             case "1" -> {
+                System.out.println("Что желаете приобрести? зелье(+50 HP)/меч(+5 Сила)/щит(+10 Ловкость)");
                 sellTrader(bufferedReader.readLine());
                 printNavigation();
                 command(bufferedReader.readLine());
@@ -107,8 +108,7 @@ public class Game {
         }
     }
 
-    private static void sellTrader(String str) {
-        System.out.println("Что желаете приобрести? зелье/меч/щит");
+    private static void sellTrader(String str) throws IOException{
         int potion = 50;
         int pricePotion = 50;
         int sword = 5;
@@ -118,27 +118,36 @@ public class Game {
         switch (str) {
             case "зелье" -> {
                 if (player.getGold() < pricePotion) {
-                    System.out.println("Не хватает денег на зелье(((");
+                    System.out.println("Не хватает денег на зелье(((\n");
                 } else {
                     player.setHealth(player.getHealth() + potion);
                     player.setGold(player.getGold() - pricePotion);
+                    System.out.println("Вы купили зелье + 50 НР\n");
                 }
+                printNavigation();
+                command(bufferedReader.readLine());
             }
             case "меч" -> {
                 if (player.getGold() < priceSword) {
-                    System.out.println("Не хватает денег на меч, дерись палкой)))");
+                    System.out.println("Не хватает денег на меч, дерись палкой)))\n");
                 } else {
                     player.setStrength(player.getStrength() + sword);
                     player.setGold(player.getGold() - priceSword);
+                    System.out.println("Вы купили меч + 5 к Силе\n");
                 }
+                printNavigation();
+                command(bufferedReader.readLine());
             }
             case "щит" -> {
                 if (player.getGold() < priceShield) {
-                    System.out.println("Не хватает денег на щит(((");
+                    System.out.println("Не хватает денег на щит(((\n");
                 } else {
                     player.setAgility(player.getAgility() + shield);
                     player.setGold(player.getGold() - priceShield);
+                    System.out.println("Вы купили щит + 10 к Ловкости\n");
                 }
+                printNavigation();
+                command(bufferedReader.readLine());
             }
         }
     }
