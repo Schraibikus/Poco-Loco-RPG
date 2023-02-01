@@ -1,6 +1,6 @@
 import java.util.Random;
 
-public abstract class Creature implements Fighter{
+public abstract class Creature implements Fighter {
     static final Random random = new Random();
 
     private String name;
@@ -9,33 +9,48 @@ public abstract class Creature implements Fighter{
     private int gold;
     private int strength;
     private int experience;
+    private int level;
 
 
-    public Creature(int agility, int health, int gold, int strength, int experience){
+    public Creature(int agility, int health, int gold, int strength, int experience) {
         this.name = "Безымянный";
         this.agility = agility;
         this.health = health;
         this.gold = gold;
         this.strength = strength;
         this.experience = experience;
-
     }
-    public Creature(String name, int agility, int health, int gold, int strength, int experience){
+
+
+    public Creature(String name, int agility, int health, int gold, int strength, int experience, int level) {
         this.name = name;
         this.agility = agility;
         this.health = health;
         this.gold = gold;
         this.strength = strength;
         this.experience = experience;
-
+        this.level = level;
     }
+
     @Override
     public int attack() {
-        if (agility * 3 > random.nextInt(50) + 1){
+        if (agility * 3 > random.nextInt(50) + 1) {
             return strength;
-        } else if (health * 2 > random.nextInt(100) + 1){
+        } else if (health * 2 > random.nextInt(100) + 1) {
             return strength * 2;
         } else return 0;
+    }
+
+    @Override
+    public int levelUp() {
+        if (experience <= 499) {
+            level = 1;
+        } else if (experience >= 500 && experience <= 999) {
+            level = 2;
+        } else {
+            level = 3;
+        }
+        return level;
     }
 
     public String getName() {
@@ -85,4 +100,13 @@ public abstract class Creature implements Fighter{
     public void setExperience(int experience) {
         this.experience = experience;
     }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
 }

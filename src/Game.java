@@ -28,7 +28,7 @@ public class Game {
         }
         switch (str) {
             case "1" -> {
-                System.out.println("Что желаете приобрести? зелье(+50 HP)/меч(+5 Сила)/щит(+10 Ловкость)");
+                System.out.println("Что желаете приобрести? зелье(+50 HP)/меч(+5 Сила)/кольцо(+10 Ловкость)");
                 sellTrader(bufferedReader.readLine());
                 printNavigation();
                 command(bufferedReader.readLine());
@@ -40,8 +40,8 @@ public class Game {
                 command(bufferedReader.readLine());
             }
             case "3" -> {
-                System.out.printf("Вот всё и закончилось. Ты дома. Уровень здоровья: %d. Золота накоплено:%d. Опыт:%d \n",
-                        player.getHealth(), player.getGold(), player.getExperience());
+                System.out.printf("Вот всё и закончилось. Ты дома. Уровень здоровья: %d. Золота накоплено:%d. Опыт:%d. Уровень:%d \n",
+                        player.getHealth(), player.getGold(), player.getExperience(), player.levelUp());
                 System.exit(1);
             }
         }
@@ -60,8 +60,8 @@ public class Game {
 
             @Override
             public void fightWin() {
-                System.out.printf("%s победил! Теперь у Вас %d опыта и %d золота, осталось %d здоровья.\n",
-                        player.getName(), player.getExperience(), player.getGold(), player.getHealth());
+                System.out.printf("%s победил! Теперь у Вас %d опыта и %d золота, осталось %d здоровья. Ваш уровень:%d \n",
+                        player.getName(), player.getExperience(), player.getGold(), player.getHealth(), player.levelUp());
                 System.out.println("Желаете продолжить поход или вернуться в город? (да/нет)");
                 try {
                     command(bufferedReader.readLine());
@@ -138,13 +138,13 @@ public class Game {
                 printNavigation();
                 command(bufferedReader.readLine());
             }
-            case "щит" -> {
+            case "кольцо" -> {
                 if (player.getGold() < priceShield) {
-                    System.out.println("Не хватает денег на щит(((\n");
+                    System.out.println("Не хватает денег на кольцо (((\n");
                 } else {
                     player.setAgility(player.getAgility() + shield);
                     player.setGold(player.getGold() - priceShield);
-                    System.out.println("Вы купили щит + 10 к Ловкости\n");
+                    System.out.println("Вы купили кольцо + 10 к Ловкости\n");
                 }
                 printNavigation();
                 command(bufferedReader.readLine());

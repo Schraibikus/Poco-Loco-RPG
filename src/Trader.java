@@ -9,10 +9,10 @@ public class Trader implements Seller{
         } else if (products == Products.SWORD){
             result = "меч";
             return result;
-        } else result = "щит";
+        } else result = "кольцо";
         return result;
     }
     public enum Products{
-        POTION, SWORD, SHIELD
+        POTION, SWORD, RING
     }
 }
