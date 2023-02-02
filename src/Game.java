@@ -50,9 +50,9 @@ public class Game {
 
     private static void printNavigation() {
         System.out.println("Куда вы хотите пойти?");
-        System.out.println("1.К Торговцу");
-        System.out.println("2.В тёмный лес");
-        System.out.println("3.Выход");
+        System.out.println("1. К Торговцу");
+        System.out.println("2. В тёмный лес");
+        System.out.println("3. Выход");
     }
 
     private static void commitFight() {
@@ -123,6 +123,7 @@ public class Game {
                     player.setHealth(player.getHealth() + potion);
                     player.setGold(player.getGold() - pricePotion);
                     System.out.println("Вы купили зелье + 50 НР\n");
+                    System.out.printf("У Вас осталось %d золота\n", player.getGold());
                 }
                 printNavigation();
                 command(bufferedReader.readLine());
@@ -134,6 +135,7 @@ public class Game {
                     player.setStrength(player.getStrength() + sword);
                     player.setGold(player.getGold() - priceSword);
                     System.out.println("Вы купили меч + 5 к Силе\n");
+                    System.out.printf("У Вас осталось %d золота\n", player.getGold());
                 }
                 printNavigation();
                 command(bufferedReader.readLine());
@@ -145,6 +147,7 @@ public class Game {
                     player.setAgility(player.getAgility() + shield);
                     player.setGold(player.getGold() - priceShield);
                     System.out.println("Вы купили кольцо + 10 к Ловкости\n");
+                    System.out.printf("У Вас осталось %d золота\n", player.getGold());
                 }
                 printNavigation();
                 command(bufferedReader.readLine());
